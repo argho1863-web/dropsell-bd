@@ -2,10 +2,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
-import {
-  Search, SlidersHorizontal, Zap, Shield, Truck, HeadphonesIcon,
-  ChevronRight, Star, TrendingUp, Package
-} from "lucide-react";
+import { Search, Zap, Shield, Truck, HeadphonesIcon, TrendingUp, Package, CheckCircle, XCircle, X } from "lucide-react";
 
 const CATEGORIES = ["all", "electronics", "fashion", "home", "beauty", "sports", "books"];
 
@@ -18,6 +15,12 @@ interface Product {
   image: string;
 }
 
+interface StatusBanner {
+  type: "approved" | "cancelled";
+  method: string;
+  order: string;
+}
+
 function HomeContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,10 +28,16 @@ function HomeContent() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "all");
   const [searchInput, setSearchInput] = useState("");
+  const [banner, setBanner] = useState<StatusBanner | null>(null);
 
   useEffect(() => {
     const cat = searchParams.get("category") || "all";
     setActiveCategory(cat);
+    const orderstatus = searchParams.get("orderstatus");
+    const method = searchParams.get("method") || "cod";
+    const order = searchParams.get("order") || "";
+    if (orderstatus === "confirmed") setBanner({ type: "approved", method, order });
+    else if (orderstatus === "cancelled") setBanner({ type: "cancelled", method, order });
   }, [searchParams]);
 
   useEffect(() => {
@@ -56,45 +65,63 @@ function HomeContent() {
   };
 
   return (
-    <div className="page-enter">
-      {/* Hero Banner */}
-      <section className="relative bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/4" />
+    <div>
+      {/* Status Banner */}
+      {banner && (
+        <div style={{
+          background: banner.type === "approved" ? "#16a34a" : "#ef4444",
+          color: "white", padding: "16px", textAlign: "center", position: "relative",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", flexWrap: "wrap" }}>
+            {banner.type === "approved" ? (
+              <CheckCircle size={20} />
+            ) : (
+              <XCircle size={20} />
+            )}
+            <strong style={{ fontSize: "16px" }}>
+              {banner.type === "approved"
+                ? `Approval Successful! Order #${banner.order} has been placed.`
+                : banner.method === "cod"
+                ? `Order #${banner.order} — Approval Failed.`
+                : `Order #${banner.order} — Approval Failed. You will get your money back within 48 hours.`}
+            </strong>
+          </div>
+          <button
+            onClick={() => setBanner(null)}
+            style={{ position: "absolute", right: "16px", top: "50%", transform: "translateY(-50%)", background: "transparent", border: "none", color: "white", cursor: "pointer" }}
+          >
+            <X size={18} />
+          </button>
         </div>
+      )}
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm mb-5 border border-white/30">
-              <Zap className="w-3.5 h-3.5 text-yellow-300" />
-              <span>Bangladesh&apos;s Most Trusted Marketplace</span>
+      {/* Hero Banner */}
+      <section style={{ background: "linear-gradient(135deg, #15803d, #16a34a, #22c55e)", color: "white", padding: "64px 16px", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative" }}>
+          <div style={{ maxWidth: "600px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.2)", borderRadius: "99px", padding: "6px 16px", fontSize: "13px", marginBottom: "20px", border: "1px solid rgba(255,255,255,0.3)" }}>
+              <Zap size={14} color="#fde047" />
+              Bangladesh&apos;s Most Trusted Marketplace
             </div>
-            <h1 className="font-display font-extrabold text-4xl md:text-5xl leading-tight mb-4">
-              Shop Smart,<br />
-              <span className="text-yellow-300">Save More</span> 🛒
+            <h1 style={{ fontSize: "42px", fontWeight: "800", lineHeight: "1.1", marginBottom: "16px" }}>
+              Shop Smart,{" "}
+              <span style={{ color: "#fde047" }}>Save More</span>
             </h1>
-            <p className="text-white/80 text-lg mb-8 leading-relaxed">
-              Discover thousands of quality products with fast delivery across Bangladesh. 
-              Cash on Delivery available everywhere!
+            <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "17px", marginBottom: "28px" }}>
+              Quality products with fast delivery across Bangladesh. Cash on Delivery available everywhere!
             </p>
-
-            {/* Search bar */}
-            <form onSubmit={handleSearchSubmit} className="flex gap-2 max-w-md">
-              <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <form onSubmit={handleSearchSubmit} style={{ display: "flex", gap: "8px", maxWidth: "440px" }}>
+              <div style={{ position: "relative", flex: 1 }}>
+                <Search size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }} />
                 <input
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-3.5 rounded-2xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-300 shadow-lg"
+                  style={{ width: "100%", paddingLeft: "40px", paddingRight: "16px", paddingTop: "14px", paddingBottom: "14px", borderRadius: "14px", border: "none", outline: "none", fontSize: "14px", boxSizing: "border-box" }}
                 />
               </div>
-              <button
-                type="submit"
-                className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-6 py-3.5 rounded-2xl transition-colors shadow-lg active:scale-95"
-              >
+              <button type="submit" style={{ background: "#fde047", color: "#111", fontWeight: "700", padding: "14px 20px", borderRadius: "14px", border: "none", cursor: "pointer", fontSize: "14px" }}>
                 Search
               </button>
             </form>
@@ -103,89 +130,81 @@ function HomeContent() {
       </section>
 
       {/* Trust badges */}
-      <section className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: Truck, text: "Fast Delivery", sub: "All over BD" },
-              { icon: Shield, text: "Secure Payment", sub: "100% Safe" },
-              { icon: Package, text: "Quality Products", sub: "Verified Sellers" },
-              { icon: HeadphonesIcon, text: "24/7 Support", sub: "WhatsApp & Email" },
-            ].map(({ icon: Icon, text, sub }) => (
-              <div key={text} className="flex items-center gap-3 py-2">
-                <div className="w-9 h-9 bg-brand-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-4.5 h-4.5 text-brand-600 w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-800">{text}</p>
-                  <p className="text-xs text-gray-400">{sub}</p>
-                </div>
+      <section style={{ background: "white", borderBottom: "1px solid #f3f4f6", padding: "12px 16px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+          {[
+            { icon: Truck, text: "Fast Delivery", sub: "All over BD" },
+            { icon: Shield, text: "Secure Payment", sub: "100% Safe" },
+            { icon: Package, text: "Quality Products", sub: "Verified" },
+            { icon: HeadphonesIcon, text: "24/7 Support", sub: "WhatsApp" },
+          ].map(({ icon: Icon, text, sub }) => (
+            <div key={text} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px" }}>
+              <div style={{ width: "36px", height: "36px", background: "#dcfce7", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Icon size={18} color="#16a34a" />
               </div>
-            ))}
-          </div>
+              <div>
+                <p style={{ margin: 0, fontWeight: "600", fontSize: "12px", color: "#111827" }}>{text}</p>
+                <p style={{ margin: 0, fontSize: "11px", color: "#9ca3af" }}>{sub}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Main content */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Products */}
+      <section style={{ maxWidth: "1200px", margin: "0 auto", padding: "24px 16px" }}>
         {/* Category filters */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide mb-6">
+        <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "8px", marginBottom: "20px" }}>
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => { setActiveCategory(cat); setSearch(""); setSearchInput(""); }}
-              className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold capitalize transition-all duration-200 ${
-                activeCategory === cat
-                  ? "bg-brand-600 text-white shadow-md shadow-brand-600/30"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-brand-300 hover:text-brand-600"
-              }`}
+              style={{
+                flexShrink: 0, padding: "8px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: "600",
+                cursor: "pointer", border: "none", textTransform: "capitalize",
+                background: activeCategory === cat ? "#16a34a" : "white",
+                color: activeCategory === cat ? "white" : "#6b7280",
+                boxShadow: activeCategory === cat ? "0 2px 8px rgba(22,163,74,0.3)" : "0 1px 3px rgba(0,0,0,0.1)",
+              }}
             >
-              {cat === "all" ? "🏠 All Products" : cat}
+              {cat === "all" ? "All Products" : cat}
             </button>
           ))}
         </div>
 
-        {/* Results header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display font-bold text-gray-800 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-brand-600" />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+          <h2 style={{ fontSize: "18px", fontWeight: "700", color: "#111827", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+            <TrendingUp size={18} color="#16a34a" />
             {search ? `Results for "${search}"` : activeCategory === "all" ? "All Products" : `${activeCategory} Products`}
-            {!loading && (
-              <span className="text-sm font-normal text-gray-400">({products.length})</span>
-            )}
+            {!loading && <span style={{ fontSize: "13px", fontWeight: "400", color: "#9ca3af" }}>({products.length})</span>}
           </h2>
           {search && (
-            <button
-              onClick={() => { setSearch(""); setSearchInput(""); }}
-              className="text-xs text-red-500 hover:underline"
-            >
+            <button onClick={() => { setSearch(""); setSearchInput(""); }} style={{ fontSize: "12px", color: "#ef4444", background: "none", border: "none", cursor: "pointer" }}>
               Clear search
             </button>
           )}
         </div>
 
-        {/* Products grid */}
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="card animate-pulse">
-                <div className="aspect-square bg-gray-100" />
-                <div className="p-4 space-y-2">
-                  <div className="h-4 bg-gray-100 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
-                  <div className="h-8 bg-gray-100 rounded" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} style={{ background: "white", borderRadius: "16px", overflow: "hidden", animation: "pulse 1.5s infinite" }}>
+                <div style={{ aspectRatio: "1", background: "#f3f4f6" }} />
+                <div style={{ padding: "12px" }}>
+                  <div style={{ height: "14px", background: "#f3f4f6", borderRadius: "4px", marginBottom: "8px" }} />
+                  <div style={{ height: "20px", background: "#f3f4f6", borderRadius: "4px", width: "60%" }} />
                 </div>
               </div>
             ))}
           </div>
         ) : products.length === 0 ? (
-          <div className="text-center py-20">
-            <Package className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-            <h3 className="font-display font-semibold text-gray-500 text-xl mb-2">No products found</h3>
-            <p className="text-gray-400 text-sm">Try a different search or browse other categories.</p>
+          <div style={{ textAlign: "center", padding: "80px 16px" }}>
+            <Package size={64} color="#e5e7eb" style={{ margin: "0 auto 16px" }} />
+            <h3 style={{ color: "#9ca3af", fontSize: "20px", fontWeight: "600" }}>No products found</h3>
+            <p style={{ color: "#d1d5db", fontSize: "14px" }}>Try a different search or browse other categories.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
@@ -198,8 +217,8 @@ function HomeContent() {
 
 export default function HomePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#f9fafb" }} />}>
       <HomeContent />
     </Suspense>
   );
-}
+                                                 }
