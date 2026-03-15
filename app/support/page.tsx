@@ -31,7 +31,7 @@ export default function SupportPage() {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            
+            <a
               href="https://wa.me/8801707776676"
               target="_blank"
               rel="noopener noreferrer"
@@ -42,14 +42,14 @@ export default function SupportPage() {
                   <MessageCircle size={20} color="white" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: "11px", color: "#16a34a", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>WhatsApp</p>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#16a34a", fontWeight: "600", textTransform: "uppercase" }}>WhatsApp</p>
                   <p style={{ margin: 0, fontWeight: "700", color: "#111827" }}>01707776676</p>
                 </div>
               </div>
               <ArrowRight size={16} color="#16a34a" />
             </a>
 
-            
+            <a
               href="mailto:arghoroy339@gmail.com"
               style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "16px", textDecoration: "none" }}
             >
@@ -58,7 +58,7 @@ export default function SupportPage() {
                   <Mail size={20} color="white" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: "11px", color: "#2563eb", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Email</p>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#2563eb", fontWeight: "600", textTransform: "uppercase" }}>Email</p>
                   <p style={{ margin: 0, fontWeight: "700", color: "#111827", fontSize: "13px" }}>arghoroy339@gmail.com</p>
                 </div>
               </div>
@@ -80,4 +80,5 @@ export default function SupportPage() {
       </div>
     </div>
   );
-}
+      }
+      
