@@ -12,7 +12,6 @@ interface GlobalMongoose {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongoose: GlobalMongoose | undefined;
 }
 
@@ -26,9 +25,13 @@ async function dbConnect(): Promise<typeof mongoose> {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(MONGODB_URI, { bufferCommands: false })
-      .then((m) => m);
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 20000,
+      connectTimeoutMS: 10000,
+      maxPoolSize: 10,
+    });
   }
 
   cached.conn = await cached.promise;
