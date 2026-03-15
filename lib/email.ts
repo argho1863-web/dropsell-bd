@@ -12,16 +12,16 @@ const transporter = nodemailer.createTransport({
 
 export async function sendVerificationEmail(email: string, otp: string, name: string) {
   await transporter.sendMail({
-    from: `"DropSell BD" <${process.env.SMTP_USER}>`,
+    from: `"Probaho" <${process.env.SMTP_USER}>`,
     to: email,
-    subject: "Verify your DropSell BD account",
+    subject: "Verify your Probaho account",
     html: `
       <!DOCTYPE html>
       <html>
       <body style="font-family: Arial, sans-serif; background: #f0fdf4; margin: 0; padding: 20px;">
         <div style="max-width: 500px; margin: auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.1);">
           <div style="background: linear-gradient(135deg, #16a34a, #15803d); padding: 32px; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">DropSell BD</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">Probaho</h1>
             <p style="color: #bbf7d0; margin: 8px 0 0;">Email Verification</p>
           </div>
           <div style="padding: 32px;">
@@ -65,7 +65,7 @@ export async function sendAdminOrderNotification(order: {
     .join("");
 
   await transporter.sendMail({
-    from: `"DropSell BD Orders" <${process.env.SMTP_USER}>`,
+    from: `"Probaho Orders" <${process.env.SMTP_USER}>`,
     to: process.env.ADMIN_EMAIL,
     subject: `New Order #${order.orderNumber} — Action Required`,
     html: `
@@ -73,12 +73,10 @@ export async function sendAdminOrderNotification(order: {
       <html>
       <body style="font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 20px;">
         <div style="max-width: 600px; margin: auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
-
           <div style="background: linear-gradient(135deg, #16a34a, #15803d); padding: 24px; text-align: center;">
             <h1 style="color: white; margin: 0; font-size: 24px;">New Order Received!</h1>
             <p style="color: #bbf7d0; margin: 8px 0 0; font-size: 18px; font-weight: bold;">Order #${order.orderNumber}</p>
           </div>
-
           <div style="padding: 24px;">
             <h3 style="color: #111827; margin-top: 0;">Customer Details</h3>
             <table style="width:100%;font-size:14px;">
@@ -86,7 +84,6 @@ export async function sendAdminOrderNotification(order: {
               <tr><td style="color:#6b7280;padding:4px 0;">Phone</td><td style="font-weight:600;">${order.phone}</td></tr>
               <tr><td style="color:#6b7280;padding:4px 0;">Address</td><td style="font-weight:600;">${order.address}</td></tr>
             </table>
-
             <h3 style="color:#111827;margin-top:20px;">Order Items</h3>
             <table style="width:100%;border-collapse:collapse;font-size:14px;">
               <tr style="background:#f0fdf4;">
@@ -96,14 +93,12 @@ export async function sendAdminOrderNotification(order: {
               </tr>
               ${itemRows}
             </table>
-
             <div style="background:#f0fdf4;border-radius:8px;padding:12px;margin-top:16px;">
               <p style="margin:4px 0;font-size:14px;"><strong>Payment:</strong> ${order.paymentMethod.toUpperCase()}</p>
               ${order.txnId ? `<p style="margin:4px 0;font-size:14px;"><strong>TxnID:</strong> ${order.txnId}</p>` : ""}
               ${order.paymentScreenshot ? `<p style="margin:4px 0;font-size:14px;"><strong>Screenshot:</strong> <a href="${order.paymentScreenshot}" style="color:#16a34a;">View Payment Proof</a></p>` : ""}
               <p style="margin:8px 0 0;font-size:18px;font-weight:bold;color:#16a34a;">Total: &#2547;${order.totalAmount.toLocaleString()}</p>
             </div>
-
             <h3 style="color:#111827;margin-top:24px;">Take Action</h3>
             <div style="display:flex;gap:12px;margin-top:12px;">
               <a href="${baseUrl}/api/orders/${order._id}/approve?secret=${process.env.ADMIN_ACTION_SECRET || "dropsell-secret-2025"}"
@@ -115,9 +110,8 @@ export async function sendAdminOrderNotification(order: {
                 CANCEL ORDER
               </a>
             </div>
-
             <p style="color:#9ca3af;font-size:12px;margin-top:24px;text-align:center;">
-              Or manage orders at <a href="${baseUrl}/admin-dashboard" style="color:#16a34a;">${baseUrl}/admin-dashboard</a>
+              Manage orders at <a href="${baseUrl}/admin-dashboard" style="color:#16a34a;">${baseUrl}/admin-dashboard</a>
             </p>
           </div>
         </div>
@@ -125,4 +119,4 @@ export async function sendAdminOrderNotification(order: {
       </html>
     `,
   });
-      }
+                }
