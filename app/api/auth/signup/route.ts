@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
     await dbConnect();
 
     const existing = await User.findOne({ email: email.toLowerCase() });
+
     if (existing && existing.isVerified) {
       return NextResponse.json({ error: "Email already registered" }, { status: 409 });
     }
@@ -58,21 +59,21 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Try to send email but don't fail if it doesn't work
     try {
       await sendVerificationEmail(email, otp, name);
+      return NextResponse.json({
+        message: "Account created! Please check your email for the OTP.",
+      }, { status: 201 });
     } catch (emailErr) {
       console.error("Email sending failed:", emailErr);
-      // Still return success with OTP in response for testing
       return NextResponse.json({
-        message: "Account created! Email sending failed. Your OTP is: " + otp,
+        message: "Account created! Your OTP is: " + otp,
         otp: otp,
       }, { status: 201 });
     }
 
-    return NextResponse.json({
-      message: "Account created! Please check your email for the OTP.",
-    }, { status: 201 });
-
   } catch (err: any) {
-    console.error("Signup error:",
+    console.error("Signup error:", err);
+    return NextResponse.json({ error: "Server error: " + err.message }, { status: 500 });
+  }
+                                             }
