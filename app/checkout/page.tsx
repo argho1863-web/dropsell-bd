@@ -128,29 +128,28 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     setPlacingOrder(true);
-
     try {
-      // Save order to DB
       const orderRes = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerName,
-          phone,
-          address,
-          items: items.map((i) => ({
-            productId: i.id,
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity,
-            image: i.image,
-          })),
+          customerName, phone, address,
+          items: items.map((i) => ({ productId: i.id, name: i.name, price: i.price, quantity: i.quantity, image: i.image })),
           totalAmount: grandTotal,
           paymentMethod: paymentMethod === "cod" ? "cod" : selectedMobile!,
           txnId: txnId || undefined,
           paymentScreenshot: screenshotUrl || undefined,
         }),
       });
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) throw new Error(orderData.error || "Failed");
+      router.push(`/order-pending/${orderData.orderNumber}`);
+    } catch {
+      toast.error("Failed to place order. Please try again.");
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
 
       const orderData = await orderRes.json();
 
