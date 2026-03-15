@@ -4,12 +4,12 @@ import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "DropSell BD — Bangladesh Trusted Online Marketplace",
+  title: "Probaho — Bangladesh Trusted Online Marketplace",
   description: "Shop premium products at the best prices. Fast delivery across Bangladesh. Cash on Delivery & Mobile Payment accepted.",
-  keywords: "online shopping bangladesh, dropsell bd, buy products online, cash on delivery",
+  keywords: "online shopping bangladesh, Probaho BD, buy products online, cash on delivery",
   openGraph: {
-    title: "DropSell BD",
-    description: "Bangladesh Trusted Online Marketplace",
+    title: "Probaho®",
+    description: "Probaho- Bangladesh Trusted Online Marketplace",
     images: ["/og-image.png"],
   },
 };
