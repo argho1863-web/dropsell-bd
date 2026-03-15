@@ -33,4 +33,4 @@ export default function SupportPage() {
       </div>
     </div>
   );
-                     }
+          }
