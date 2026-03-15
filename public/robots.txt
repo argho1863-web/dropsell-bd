@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin-dashboard/
+Disallow: /api/
+
+Sitemap: https://dropsell-bd.vercel.app/sitemap.xml
