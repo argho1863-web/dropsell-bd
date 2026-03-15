@@ -1,45 +1,27 @@
 "use client";
 import { useEffect } from "react";
-import Link from "next/link";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-50 p-4">
-      <div className="text-center max-w-md">
-        <div className="w-20 h-20 bg-red-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-          <AlertTriangle className="w-10 h-10 text-red-500" />
-        </div>
-
-        <h1 className="font-display font-extrabold text-3xl text-gray-900 mb-3">
-          Something went wrong
-        </h1>
-        <p className="text-gray-500 mb-8 leading-relaxed">
-          An unexpected error occurred. Please try again or return to the home page.
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div style={{ textAlign: "center", maxWidth: "400px" }}>
+        <div style={{ fontSize: "48px", marginBottom: "16px" }}>⚠️</div>
+        <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#111827", marginBottom: "12px" }}>Something went wrong</h1>
+        <p style={{ color: "#6b7280", marginBottom: "24px" }}>An unexpected error occurred. Please try again.</p>
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
           <button
             onClick={reset}
-            className="btn-primary flex items-center gap-2"
+            style={{ background: "#16a34a", color: "white", padding: "12px 24px", borderRadius: "12px", fontWeight: "600", border: "none", cursor: "pointer" }}
           >
-            <RefreshCw className="w-4 h-4" />
             Try Again
           </button>
-          <Link href="/" className="btn-outline flex items-center gap-2">
-            <Home className="w-4 h-4" />
-            Go to Home
-          </Link>
+          <a href="/" style={{ border: "2px solid #16a34a", color: "#16a34a", padding: "12px 24px", borderRadius: "12px", fontWeight: "600", textDecoration: "none" }}>
+            Go Home
+          </a>
         </div>
       </div>
     </div>
