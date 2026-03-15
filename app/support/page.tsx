@@ -1,7 +1,7 @@
 "use client";
 import { useCart } from "@/components/CartContext";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Mail, CheckCircle, Phone, ArrowRight, HeadphonesIcon } from "lucide-react";
+import { MessageCircle, Mail, CheckCircle, ArrowRight } from "lucide-react";
 
 export default function SupportPage() {
   const { clearCart } = useCart();
@@ -13,104 +13,74 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full">
-
-        {/* Success animation */}
-        <div className="text-center mb-8">
-          <div className="relative inline-block">
-            <div className="w-24 h-24 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse-slow">
-              <CheckCircle className="w-12 h-12 text-brand-600" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-lg animate-bounce">
-              🎉
-            </div>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f0fdf4, white, #f0fdf4)", display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div style={{ maxWidth: "480px", width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <div style={{ width: "80px", height: "80px", background: "#dcfce7", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+            <CheckCircle size={40} color="#16a34a" />
           </div>
-          <h1 className="font-display font-extrabold text-3xl text-gray-900 mb-2">
-            Order Placed!
-          </h1>
-          <p className="text-brand-600 font-semibold">Please send the message on WhatsApp to confirm your order.</p>
+          <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#111827", marginBottom: "8px" }}>Order Placed!</h1>
+          <p style={{ color: "#16a34a", fontWeight: "600" }}>You will be notified once your order is approved.</p>
         </div>
 
-        {/* Support card */}
-        <div className="card p-8 shadow-xl mb-5">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center">
-              <HeadphonesIcon className="w-5 h-5 text-brand-600" />
-            </div>
-            <div>
-              <h2 className="font-display font-bold text-gray-800">Customer Support</h2>
-              <p className="text-xs text-gray-400">We&apos;re here to help!</p>
-            </div>
+        <div style={{ background: "white", borderRadius: "24px", padding: "32px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", marginBottom: "16px" }}>
+          <div style={{ background: "#fefce8", border: "1px solid #fde68a", borderRadius: "12px", padding: "16px", marginBottom: "24px" }}>
+            <p style={{ margin: 0, color: "#92400e", fontSize: "14px", lineHeight: "1.6" }}>
+              If the product is not delivered to you, contact us on <strong>WhatsApp</strong> or <strong>Email</strong>. We will resolve your issue promptly.
+            </p>
           </div>
 
-          <p className="text-gray-600 text-sm leading-relaxed mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4">
-            ⚠️ <strong>Important:</strong> If the product is not delivered to you within the expected time, 
-            please contact us immediately on WhatsApp or Email. We will resolve your issue promptly.
-          </p>
-
-          <div className="space-y-3">
-            {/* WhatsApp */}
-            <a
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            
               href="https://wa.me/8801707776676"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-2xl group hover:bg-green-100 transition-colors"
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "16px", textDecoration: "none" }}
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-md">
-                  <MessageCircle className="w-5 h-5 text-white" />
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div style={{ width: "40px", height: "40px", background: "#16a34a", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <MessageCircle size={20} color="white" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-green-700 uppercase tracking-wide">WhatsApp</p>
-                  <p className="font-bold text-gray-800">01707776676</p>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#16a34a", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>WhatsApp</p>
+                  <p style={{ margin: 0, fontWeight: "700", color: "#111827" }}>01707776676</p>
                 </div>
               </div>
-              <ArrowRight className="w-4 h-4 text-green-600 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={16} color="#16a34a" />
             </a>
 
-            {/* Email */}
-            <a
+            
               href="mailto:arghoroy339@gmail.com"
-              className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-2xl group hover:bg-blue-100 transition-colors"
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "16px", textDecoration: "none" }}
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                  <Mail className="w-5 h-5 text-white" />
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div style={{ width: "40px", height: "40px", background: "#2563eb", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Mail size={20} color="white" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-blue-700 uppercase tracking-wide">Email</p>
-                  <p className="font-bold text-gray-800 text-sm">arghoroy339@gmail.com</p>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#2563eb", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em" }}>Email</p>
+                  <p style={{ margin: 0, fontWeight: "700", color: "#111827", fontSize: "13px" }}>arghoroy339@gmail.com</p>
                 </div>
               </div>
-              <ArrowRight className="w-4 h-4 text-blue-600 group-hover:translate-x-1 transition-transform" />
-            </a>
-
-            {/* Phone */}
-            <a
-              href="tel:+8801707776676"
-              className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-2xl group hover:bg-gray-100 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-700 rounded-xl flex items-center justify-center shadow-md">
-                  <Phone className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Phone</p>
-                  <p className="font-bold text-gray-800">01707776676</p>
-                </div>
-              </div>
-              <ArrowRight className="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={16} color="#2563eb" />
             </a>
           </div>
         </div>
 
-        {/* OK Button */}
         <button
           onClick={handleOK}
-          className="btn-primary w-full flex items-center justify-center gap-2 text-base py-4 shadow-lg"
+          style={{ width: "100%", background: "#16a34a", color: "white", fontWeight: "700", fontSize: "16px", padding: "16px", borderRadius: "16px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
         >
-          <CheckCircle className="w-5 h-5" />
+          <CheckCircle size={20} />
+          OK — Continue Shopping
+        </button>
+        <p style={{ textAlign: "center", fontSize: "12px", color: "#9ca3af", marginTop: "12px" }}>
+          Clicking OK will clear your cart and take you back to the home page.
+        </p>
+      </div>
+    </div>
+  );
+          }          <CheckCircle className="w-5 h-5" />
           OK — Continue Shopping
         </button>
 
