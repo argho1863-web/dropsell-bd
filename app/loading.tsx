@@ -1,18 +1,11 @@
-import { Package } from "lucide-react";
-
 export default function Loading() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-      <div className="relative">
-        <div className="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center animate-pulse">
-          <Package className="w-8 h-8 text-brand-600" />
-        </div>
-        <div className="absolute inset-0 rounded-2xl border-2 border-brand-400 border-t-transparent animate-spin" />
+    <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ width: "48px", height: "48px", border: "4px solid #dcfce7", borderTop: "4px solid #16a34a", borderRadius: "50%", animation: "spin 1s linear infinite", margin: "0 auto 16px" }} />
+        <p style={{ color: "#6b7280", fontSize: "14px" }}>Loading...</p>
       </div>
-      <div className="space-y-2 text-center">
-        <div className="h-3 w-32 bg-gray-200 rounded-full animate-pulse mx-auto" />
-        <div className="h-2 w-20 bg-gray-100 rounded-full animate-pulse mx-auto" />
-      </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
