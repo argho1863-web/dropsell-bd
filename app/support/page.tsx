@@ -80,14 +80,4 @@ export default function SupportPage() {
       </div>
     </div>
   );
-          }          <CheckCircle className="w-5 h-5" />
-          OK — Continue Shopping
-        </button>
-
-        <p className="text-center text-xs text-gray-400 mt-4">
-          Clicking OK will clear your cart and take you back to the home page.
-        </p>
-      </div>
-    </div>
-  );
 }
