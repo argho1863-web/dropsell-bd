@@ -3,10 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from "./CartContext";
-import {
-  ShoppingCart, Menu, X, User, LogOut, Settings,
-  Shield, ChevronDown, Search, Package
-} from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, Shield, ChevronDown, Package } from "lucide-react";
 import AdminPasswordModal from "./AdminPasswordModal";
 import CartDrawer from "./CartDrawer";
 
@@ -40,26 +37,20 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`sticky top-0 z-40 bg-white transition-all duration-300 ${
-          scrolled ? "shadow-md" : "border-b border-gray-100"
-        }`}
-      >
-        {/* Top announcement bar */}
+      <nav className={`sticky top-0 z-40 bg-white transition-all duration-300 ${scrolled ? "shadow-md" : "border-b border-gray-100"}`}>
         <div className="bg-brand-700 text-white text-xs text-center py-1.5 px-4 font-medium">
-          🚚 Free Delivery on orders above ৳999 | Cash on Delivery Available
+          Free Delivery on orders above 999 BDT | Cash on Delivery Available
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
               <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
                 <Package className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="font-display font-800 text-xl text-brand-700 leading-none block">
-                  DropSell
+                <span className="font-display font-extrabold text-xl text-brand-700 leading-none block">
+                  Probaho
                 </span>
                 <span className="text-[10px] text-gray-400 font-body leading-none tracking-widest uppercase">
                   Bangladesh
@@ -67,7 +58,6 @@ export default function Navbar() {
               </div>
             </Link>
 
-            {/* Desktop Nav links */}
             <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
               <Link href="/" className="hover:text-brand-600 transition-colors">Home</Link>
               <Link href="/?category=electronics" className="hover:text-brand-600 transition-colors">Electronics</Link>
@@ -75,9 +65,7 @@ export default function Navbar() {
               <Link href="/?category=home" className="hover:text-brand-600 transition-colors">Home & Living</Link>
             </div>
 
-            {/* Right actions */}
             <div className="flex items-center gap-2">
-              {/* Cart */}
               <button
                 onClick={() => setCartOpen(true)}
                 className="relative p-2.5 rounded-xl hover:bg-brand-50 text-gray-600 hover:text-brand-600 transition-colors"
@@ -85,13 +73,12 @@ export default function Navbar() {
               >
                 <ShoppingCart className="w-5 h-5" />
                 {count > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-bounce">
+                  <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                     {count > 99 ? "99+" : count}
                   </span>
                 )}
               </button>
 
-              {/* Admin button */}
               {isAdmin && (
                 <button
                   onClick={() => setAdminModalOpen(true)}
@@ -102,7 +89,6 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Auth */}
               {session ? (
                 <div ref={userMenuRef} className="relative">
                   <button
@@ -124,7 +110,7 @@ export default function Navbar() {
                   </button>
 
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50 animate-slide-up">
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50">
                       <div className="px-4 py-3 border-b border-gray-50">
                         <p className="text-xs text-gray-400">Signed in as</p>
                         <p className="text-sm font-semibold text-gray-800 truncate">{session.user?.email}</p>
@@ -158,7 +144,6 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* Mobile menu toggle */}
               <button
                 className="md:hidden p-2.5 rounded-xl hover:bg-gray-50 text-gray-600"
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -169,9 +154,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
         {mobileOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4 space-y-1 animate-slide-up">
+          <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4 space-y-1">
             {["Home", "Electronics", "Fashion", "Home & Living"].map((item) => (
               <Link
                 key={item}
@@ -218,4 +202,4 @@ export default function Navbar() {
       <AdminPasswordModal open={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
     </>
   );
-}
+      }
