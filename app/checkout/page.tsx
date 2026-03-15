@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { useWhatsApp } from "@/hooks/useWhatsApp";
 
 type PaymentMethod = "cod" | "bkash" | "nagad" | "rocket" | "payment";
 type Step = 1 | 2 | 3;
@@ -23,8 +22,6 @@ const MOBILE_PAYMENT_OPTIONS = [
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const router = useRouter();
-  const { openOrder } = useWhatsApp();
-  const [successModal, setSuccessModal] = useState<"success" | "failed" | null>(null);
 
   // Step 1 fields
   const [customerName, setCustomerName] = useState("");
