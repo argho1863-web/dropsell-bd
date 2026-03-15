@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useWhatsApp } from "@/hooks/useWhatsApp";
 
-type PaymentMethod = "cod" | "bkash" | "nagad" | "rocket";
+type PaymentMethod = "cod" | "bkash" | "nagad" | "rocket" | "payment";
 type Step = 1 | 2 | 3;
 
 const MOBILE_PAYMENT_OPTIONS = [
