@@ -8,7 +8,6 @@ export default function OrderPendingPage() {
   const router = useRouter();
   const orderNumber = params.orderNumber as string;
   const [status, setStatus] = useState("pending");
-  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [dots, setDots] = useState(".");
 
   useEffect(() => {
@@ -27,7 +26,6 @@ export default function OrderPendingPage() {
         const data = await res.json();
         if (data.status) {
           setStatus(data.status);
-          setPaymentMethod(data.paymentMethod || "cod");
           if (data.status === "confirmed" || data.status === "cancelled") {
             clearInterval(interval);
             setTimeout(() => {
@@ -77,7 +75,6 @@ export default function OrderPendingPage() {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f9fafb", padding: "16px" }}>
       <div style={{ textAlign: "center", maxWidth: "480px", width: "100%" }}>
         <div style={{ background: "white", borderRadius: "24px", padding: "40px 32px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
-
           <div style={{ width: "80px", height: "80px", margin: "0 auto 24px", position: "relative" }}>
             <div style={{ width: "80px", height: "80px", border: "6px solid #dcfce7", borderTop: "6px solid #16a34a", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -103,7 +100,7 @@ export default function OrderPendingPage() {
 
           <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "16px", fontSize: "13px", color: "#374151" }}>
             <p style={{ margin: "0 0 8px", fontWeight: "600" }}>Need help?</p>
-            
+            <a
               href="https://wa.me/8801707776676"
               target="_blank"
               rel="noopener noreferrer"
@@ -118,4 +115,5 @@ export default function OrderPendingPage() {
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
-  }
+      }
+                       
