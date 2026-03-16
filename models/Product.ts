@@ -8,6 +8,7 @@ export interface IProduct extends Document {
   image: string;
   cloudinaryId: string;
   inStock: boolean;
+  allowedPayments: "both" | "cod" | "paynow";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,6 +22,7 @@ const ProductSchema = new Schema<IProduct>(
     image: { type: String, required: true },
     cloudinaryId: { type: String },
     inStock: { type: Boolean, default: true },
+    allowedPayments: { type: String, enum: ["both", "cod", "paynow"], default: "both" },
   },
   { timestamps: true }
 );
