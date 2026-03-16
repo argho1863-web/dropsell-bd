@@ -2,11 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  Plus, Pencil, Trash2, X, Package, ShoppingBag, TrendingUp,
-  Upload, Loader2, CheckCircle, Eye, Search,
-  LayoutDashboard, RefreshCw, AlertTriangle, Tag
-} from "lucide-react";
+import { Plus, Pencil, Trash2, X, Package, ShoppingBag, TrendingUp, Upload, Loader2, CheckCircle, Eye, Search, LayoutDashboard, RefreshCw, AlertTriangle, Tag } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Product {
@@ -68,8 +64,6 @@ export default function AdminDashboard() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [addingCategory, setAddingCategory] = useState(false);
   const [deletingCategory, setDeletingCategory] = useState(false);
-
-  // Product form state
   const [pName, setPName] = useState("");
   const [pPrice, setPPrice] = useState("");
   const [pCategory, setPCategory] = useState("");
@@ -98,11 +92,7 @@ export default function AdminDashboard() {
         fetch("/api/orders"),
         fetch("/api/categories"),
       ]);
-      const [prods, ords, cats] = await Promise.all([
-        prodRes.json(),
-        ordRes.json(),
-        catRes.json(),
-      ]);
+      const [prods, ords, cats] = await Promise.all([prodRes.json(), ordRes.json(), catRes.json()]);
       setProducts(Array.isArray(prods) ? prods : []);
       setOrders(Array.isArray(ords) ? ords : []);
       setCategories(Array.isArray(cats) ? cats : []);
@@ -167,18 +157,10 @@ export default function AdminDashboard() {
     }
     setSavingProduct(true);
     try {
-      const body = {
-        name: pName, price: Number(pPrice),
-        category: pCategory, description: pDescription,
-        image: pImage, cloudinaryId: pCloudId,
-      };
+      const body = { name: pName, price: Number(pPrice), category: pCategory, description: pDescription, image: pImage, cloudinaryId: pCloudId };
       const url = editingProduct ? `/api/products/${editingProduct._id}` : "/api/products";
       const method = editingProduct ? "PUT" : "POST";
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (res.ok) {
         toast.success(editingProduct ? "Product updated!" : "Product added!");
         setShowProductModal(false);
@@ -238,9 +220,7 @@ export default function AdminDashboard() {
     if (!deleteCategoryConfirm) return;
     setDeletingCategory(true);
     try {
-      const res = await fetch(`/api/categories/${deleteCategoryConfirm._id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`/api/categories/${deleteCategoryConfirm._id}`, { method: "DELETE" });
       const data = await res.json();
       if (res.ok) {
         toast.success(data.message || "Category deleted!");
@@ -263,10 +243,7 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      if (res.ok) {
-        toast.success("Status updated");
-        fetchAll();
-      }
+      if (res.ok) { toast.success("Status updated"); fetchAll(); }
     } catch {
       toast.error("Failed to update status");
     }
@@ -274,91 +251,75 @@ export default function AdminDashboard() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-10 h-10 text-brand-600 animate-spin" />
-          <p className="text-gray-500 font-medium">Loading admin panel...</p>
+      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#f9fafb"}}>
+        <div style={{textAlign:"center"}}>
+          <Loader2 size={40} color="#16a34a" style={{animation:"spin 1s linear infinite",margin:"0 auto 12px"}} />
+          <p style={{color:"#6b7280",fontWeight:"500"}}>Loading admin panel...</p>
         </div>
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     );
   }
 
-  const totalRevenue = orders.filter(o => o.status !== "cancelled")
-    .reduce((sum, o) => sum + o.totalAmount, 0);
+  const totalRevenue = orders.filter(o => o.status !== "cancelled").reduce((sum, o) => sum + o.totalAmount, 0);
   const pendingOrders = orders.filter(o => o.status === "pending").length;
-  const filteredProducts = products.filter(p =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gray-900 text-white px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
-            <LayoutDashboard className="w-4 h-4" />
+    <div style={{minHeight:"100vh",background:"#f9fafb"}}>
+      <div style={{background:"#111827",color:"white",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex",alignItems:"center",gap:"12px"}}>
+          <div style={{width:"32px",height:"32px",background:"#16a34a",borderRadius:"8px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <LayoutDashboard size={16} color="white" />
           </div>
-          <div>
-            <span className="font-display font-bold">Admin Dashboard</span>
-            <span className="text-gray-400 text-xs ml-2">Probaho</span>
-          </div>
+          <span style={{fontWeight:"700",fontSize:"16px"}}>Admin Dashboard — Probaho</span>
         </div>
-        <button onClick={fetchAll} className="p-2 rounded-xl hover:bg-gray-800 text-gray-400 hover:text-white transition">
-          <RefreshCw className="w-4 h-4" />
+        <button onClick={fetchAll} style={{background:"transparent",border:"none",color:"#9ca3af",cursor:"pointer",padding:"8px"}}>
+          <RefreshCw size={16} />
         </button>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        {/* Tab Nav */}
-        <div className="flex gap-1 bg-white border border-gray-200 rounded-2xl p-1 mb-6 w-fit shadow-sm overflow-x-auto">
+      <div style={{maxWidth:"1200px",margin:"0 auto",padding:"24px 16px"}}>
+        <div style={{display:"flex",gap:"4px",background:"white",border:"1px solid #e5e7eb",borderRadius:"16px",padding:"4px",marginBottom:"24px",width:"fit-content",overflowX:"auto"}}>
           {([
-            { key: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-            { key: "products", label: "Products", icon: Package },
-            { key: "orders", label: "Orders", icon: ShoppingBag },
-            { key: "categories", label: "Categories", icon: Tag },
+            { key:"dashboard", label:"Dashboard", icon:LayoutDashboard },
+            { key:"products", label:"Products", icon:Package },
+            { key:"orders", label:"Orders", icon:ShoppingBag },
+            { key:"categories", label:"Categories", icon:Tag },
           ] as const).map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
-                tab === key ? "bg-brand-600 text-white shadow-md" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
+            <button key={key} onClick={() => setTab(key)} style={{display:"flex",alignItems:"center",gap:"8px",padding:"10px 16px",borderRadius:"12px",fontSize:"13px",fontWeight:"600",border:"none",cursor:"pointer",whiteSpace:"nowrap",background:tab===key?"#16a34a":"transparent",color:tab===key?"white":"#6b7280"}}>
+              <Icon size={16} />
               {label}
             </button>
           ))}
         </div>
 
-        {/* DASHBOARD TAB */}
         {tab === "dashboard" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"16px",marginBottom:"24px"}}>
               {[
-                { label: "Total Products", value: products.length, color: "bg-blue-500" },
-                { label: "Total Orders", value: orders.length, color: "bg-brand-600" },
-                { label: "Pending Orders", value: pendingOrders, color: "bg-amber-500" },
-                { label: "Total Revenue", value: `৳${totalRevenue.toLocaleString()}`, color: "bg-purple-600" },
-              ].map(({ label, value, color }) => (
-                <div key={label} className="card p-5">
-                  <p className="text-xs font-medium text-gray-500 mb-2">{label}</p>
-                  <p className="font-display font-extrabold text-2xl text-gray-800">{value}</p>
+                { label:"Total Products", value:products.length },
+                { label:"Total Orders", value:orders.length },
+                { label:"Pending Orders", value:pendingOrders },
+                { label:"Total Revenue", value:`৳${totalRevenue.toLocaleString()}` },
+              ].map(({ label, value }) => (
+                <div key={label} style={{background:"white",borderRadius:"16px",padding:"20px",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+                  <p style={{margin:"0 0 8px",fontSize:"12px",color:"#6b7280",fontWeight:"500"}}>{label}</p>
+                  <p style={{margin:0,fontSize:"24px",fontWeight:"800",color:"#111827"}}>{value}</p>
                 </div>
               ))}
             </div>
-
-            <div className="card p-6">
-              <h3 className="font-display font-bold text-gray-800 mb-4">Recent Orders</h3>
-              {orders.slice(0, 5).map((order) => (
-                <div key={order._id} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+            <div style={{background:"white",borderRadius:"16px",padding:"24px",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+              <h3 style={{margin:"0 0 16px",fontSize:"16px",fontWeight:"700",color:"#111827"}}>Recent Orders</h3>
+              {orders.slice(0,5).map((order) => (
+                <div key={order._id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0",borderBottom:"1px solid #f9fafb"}}>
                   <div>
-                    <p className="font-semibold text-sm text-gray-800">#{order.orderNumber}</p>
-                    <p className="text-xs text-gray-400">{order.customerName} — {order.phone}</p>
+                    <p style={{margin:0,fontWeight:"600",fontSize:"14px",color:"#111827"}}>#{order.orderNumber}</p>
+                    <p style={{margin:0,fontSize:"12px",color:"#9ca3af"}}>{order.customerName} — {order.phone}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-brand-700 text-sm">৳{order.totalAmount.toLocaleString()}</p>
-                    <span className={`badge ${STATUS_COLORS[order.status] || "bg-gray-100 text-gray-600"} text-[10px] mt-1`}>
-                      {order.status}
-                    </span>
+                  <div style={{textAlign:"right"}}>
+                    <p style={{margin:0,fontWeight:"700",color:"#16a34a",fontSize:"14px"}}>৳{order.totalAmount.toLocaleString()}</p>
+                    <span style={{fontSize:"11px",padding:"2px 8px",borderRadius:"99px",background:order.status==="pending"?"#fef3c7":order.status==="confirmed"?"#dbeafe":order.status==="delivered"?"#dcfce7":"#f3f4f6",color:order.status==="pending"?"#92400e":order.status==="confirmed"?"#1e40af":order.status==="delivered"?"#15803d":"#374151"}}>{order.status}</span>
                   </div>
                 </div>
               ))}
@@ -366,39 +327,37 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* PRODUCTS TAB */}
         {tab === "products" && (
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products..." className="input-field pl-10" />
+          <div>
+            <div style={{display:"flex",gap:"12px",marginBottom:"16px",flexWrap:"wrap"}}>
+              <div style={{position:"relative",flex:1,minWidth:"200px"}}>
+                <Search size={16} style={{position:"absolute",left:"12px",top:"50%",transform:"translateY(-50%)",color:"#9ca3af"}} />
+                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search products..." style={{width:"100%",paddingLeft:"40px",paddingRight:"16px",paddingTop:"10px",paddingBottom:"10px",borderRadius:"10px",border:"1px solid #e5e7eb",outline:"none",fontSize:"14px",boxSizing:"border-box"}} />
               </div>
-              <button onClick={openAddModal} className="btn-primary flex items-center gap-2 flex-shrink-0">
-                <Plus className="w-4 h-4" />
+              <button onClick={openAddModal} style={{display:"flex",alignItems:"center",gap:"8px",background:"#16a34a",color:"white",border:"none",padding:"10px 20px",borderRadius:"10px",fontWeight:"600",cursor:"pointer",fontSize:"14px",flexShrink:0}}>
+                <Plus size={16} />
                 Add Product
               </button>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"12px"}}>
               {filteredProducts.map((product) => (
-                <div key={product._id} className="card group hover:shadow-md transition-shadow">
-                  <div className="aspect-square bg-gray-50 relative overflow-hidden">
+                <div key={product._id} style={{background:"white",borderRadius:"16px",overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+                  <div style={{position:"relative",aspectRatio:"1",background:"#f9fafb"}}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                      <button onClick={() => openEditModal(product)} className="w-9 h-9 bg-white rounded-xl flex items-center justify-center hover:bg-brand-50 transition text-gray-700">
-                        <Pencil className="w-4 h-4" />
+                    <img src={product.image} alt={product.name} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                  </div>
+                  <div style={{padding:"12px"}}>
+                    <span style={{fontSize:"10px",background:"#dcfce7",color:"#15803d",padding:"2px 8px",borderRadius:"99px",fontWeight:"600",textTransform:"capitalize"}}>{product.category}</span>
+                    <p style={{margin:"6px 0 2px",fontWeight:"600",fontSize:"13px",color:"#111827",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{product.name}</p>
+                    <p style={{margin:"0 0 8px",fontWeight:"700",color:"#16a34a"}}>৳{product.price.toLocaleString()}</p>
+                    <div style={{display:"flex",gap:"8px"}}>
+                      <button onClick={() => openEditModal(product)} style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:"4px",padding:"6px",borderRadius:"8px",border:"1px solid #e5e7eb",background:"white",cursor:"pointer",fontSize:"12px",color:"#374151"}}>
+                        <Pencil size={12} /> Edit
                       </button>
-                      <button onClick={() => setDeleteConfirm(product._id)} className="w-9 h-9 bg-white rounded-xl flex items-center justify-center hover:bg-red-50 transition text-red-500">
-                        <Trash2 className="w-4 h-4" />
+                      <button onClick={() => setDeleteConfirm(product._id)} style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",gap:"4px",padding:"6px",borderRadius:"8px",border:"1px solid #fee2e2",background:"#fef2f2",cursor:"pointer",fontSize:"12px",color:"#ef4444"}}>
+                        <Trash2 size={12} /> Delete
                       </button>
                     </div>
-                  </div>
-                  <div className="p-3">
-                    <span className="badge bg-brand-100 text-brand-700 text-[10px] capitalize mb-1">{product.category}</span>
-                    <p className="font-semibold text-sm text-gray-800 truncate mt-1">{product.name}</p>
-                    <p className="font-bold text-brand-700 mt-1">৳{product.price.toLocaleString()}</p>
                   </div>
                 </div>
               ))}
@@ -406,51 +365,43 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ORDERS TAB */}
         {tab === "orders" && (
-          <div className="space-y-4">
-            <h2 className="font-display font-bold text-gray-800">All Orders ({orders.length})</h2>
-            <div className="space-y-3">
+          <div>
+            <h2 style={{margin:"0 0 16px",fontSize:"18px",fontWeight:"700",color:"#111827"}}>All Orders ({orders.length})</h2>
+            <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
               {orders.map((order) => (
-                <div key={order._id} className="card p-5">
-                  <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <div key={order._id} style={{background:"white",borderRadius:"16px",padding:"20px",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:"12px",marginBottom:"12px"}}>
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-display font-bold text-gray-800">#{order.orderNumber}</span>
-                        <span className={`badge ${STATUS_COLORS[order.status] || "bg-gray-100 text-gray-600"}`}>{order.status}</span>
-                      </div>
-                      <p className="text-sm text-gray-600"><strong>{order.customerName}</strong> — {order.phone}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{order.address}</p>
+                      <p style={{margin:"0 0 4px",fontWeight:"700",fontSize:"16px",color:"#111827"}}>#{order.orderNumber}</p>
+                      <p style={{margin:"0 0 2px",fontSize:"14px",color:"#374151"}}><strong>{order.customerName}</strong> — {order.phone}</p>
+                      <p style={{margin:0,fontSize:"12px",color:"#9ca3af"}}>{order.address}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-brand-700 text-lg">৳{order.totalAmount.toLocaleString()}</p>
-                      <p className="text-xs text-gray-400">{new Date(order.createdAt).toLocaleDateString("en-BD")}</p>
+                    <div style={{textAlign:"right"}}>
+                      <p style={{margin:"0 0 4px",fontWeight:"700",color:"#16a34a",fontSize:"18px"}}>৳{order.totalAmount.toLocaleString()}</p>
+                      <p style={{margin:0,fontSize:"12px",color:"#9ca3af"}}>{new Date(order.createdAt).toLocaleDateString("en-BD")}</p>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"12px"}}>
                     {order.items.map((item, i) => (
-                      <span key={i} className="bg-gray-50 border border-gray-200 rounded-xl px-3 py-1 text-xs text-gray-600">
+                      <span key={i} style={{background:"#f9fafb",border:"1px solid #e5e7eb",borderRadius:"8px",padding:"4px 10px",fontSize:"12px",color:"#374151"}}>
                         {item.name} x{item.quantity}
                       </span>
                     ))}
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span className="badge bg-gray-100 text-gray-600 uppercase">{order.paymentMethod}</span>
-                      {order.txnId && <span>TxnID: {order.txnId}</span>}
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"8px"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap"}}>
+                      <span style={{fontSize:"11px",background:"#f3f4f6",padding:"2px 8px",borderRadius:"99px",textTransform:"uppercase",fontWeight:"600"}}>{order.paymentMethod}</span>
+                      {order.txnId && <span style={{fontSize:"12px",color:"#6b7280"}}>TxnID: {order.txnId}</span>}
                       {order.paymentScreenshot && (
-                        <a href={order.paymentScreenshot} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline flex items-center gap-1">
-                          <Eye className="w-3 h-3" /> Screenshot
+                        <a href={order.paymentScreenshot} target="_blank" rel="noopener noreferrer" style={{fontSize:"12px",color:"#16a34a",display:"flex",alignItems:"center",gap:"4px"}}>
+                          <Eye size={12} /> Screenshot
                         </a>
                       )}
                     </div>
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className="text-xs border border-gray-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white"
-                    >
-                      {["pending", "confirmed", "shipped", "delivered", "cancelled"].map(s => (
-                        <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                    <select value={order.status} onChange={(e) => handleStatusChange(order._id, e.target.value)} style={{fontSize:"12px",border:"1px solid #e5e7eb",borderRadius:"8px",padding:"6px 12px",outline:"none",background:"white"}}>
+                      {["pending","confirmed","shipped","delivered","cancelled"].map(s => (
+                        <option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>
                       ))}
                     </select>
                   </div>
@@ -460,37 +411,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* CATEGORIES TAB */}
         {tab === "categories" && (
-          <div className="space-y-6">
-            {/* Add Category */}
-            <div className="card p-6">
-              <h3 className="font-display font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Plus className="w-5 h-5 text-brand-600" />
-                Add New Category
-              </h3>
-              <form onSubmit={handleAddCategory} className="flex gap-3">
-                <input
-                  type="text"
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  placeholder="Category name e.g. Toys, Food, Furniture"
-                  className="input-field flex-1"
-                  required
-                />
-                <button
-                  type="submit"
-                  disabled={addingCategory || !newCategoryName.trim()}
-                  className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-                >
-                  {addingCategory ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  Add
-                </button>
-              </form>
-            </div>
-
-            {/* Category List */}
-            <div className="card p-6">
-              <h3 className="font-display font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Tag className="w-5 h-5 text-brand-600" />
-            
+          <div style={{display:"flex",flexDirection:"column",gap:"24px"}}>
+            <div style={{background:"white",borderRadius:"16px",padding:"24px",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+              <h3 style={{margin:"0 0 16px",fontSize:"16px",fontWeight:"700",color:"#111827",display:"flex",ali
