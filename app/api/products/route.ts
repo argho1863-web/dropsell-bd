@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     await dbConnect();
     const body = await req.json();
-    const { name, price, category, description, image, cloudinaryId } = body;
+    const { name, price, category, description, image, cloudinaryId, allowedPayments } = body;
 
     if (!name || !price || !category || !description || !image) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest) {
       description,
       image,
       cloudinaryId: cloudinaryId || "",
+      allowedPayments: allowedPayments || "both",
     });
 
     return NextResponse.json(product, { status: 201 });
@@ -52,4 +54,4 @@ export async function POST(req: NextRequest) {
     console.error("Create product error:", err);
     return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
   }
-}
+      }
